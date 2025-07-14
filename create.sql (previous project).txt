@@ -1,0 +1,179 @@
+-- Source Postgresql Official Documentation: https://www.postgresql.org/docs/
+-- We used the documentation and slides for commands such as SET and REFERENCES.
+SET statement_timeout = 0;
+DROP TABLE Applicant_Race;
+DROP TABLE Co_Applicant_Race;
+DROP TABLE DenialReason;
+DROP TABLE Application_Information;
+DROP TABLE Location_Information;
+DROP TABLE Agency_Information;
+DROP TABLE LoanType;
+DROP TABLE PropertyType;
+DROP TABLE LoanPurpose;
+DROP TABLE OwnerOccupancy;
+DROP TABLE Preapproval;
+DROP TABLE ActionTaken;
+DROP TABLE Applicant_Ethnicity;
+DROP TABLE Applicant_Sex;
+DROP TABLE Co_Applicant_Ethnicity;
+DROP TABLE Co_Applicant_Sex;
+DROP TABLE County;
+DROP TABLE MSAMD;
+DROP TABLE State_Information;
+DROP TABLE EmptyData;
+DROP TABLE EditStatus;
+DROP TABLE LienStatus;
+DROP TABLE HoepaStatus;
+DROP TABLE PurchaserType;
+DROP TABLE Race;
+DROP TABLE Reason;
+
+CREATE TABLE Agency_Information (
+    agency_code INTEGER PRIMARY KEY,
+    agency_name TEXT,
+    agency_abbr TEXT
+);
+
+CREATE TABLE LoanType (
+    loan_type INTEGER PRIMARY KEY,
+    loan_type_name TEXT
+);
+CREATE TABLE PropertyType (
+    property_type INTEGER PRIMARY KEY,
+    property_type_name TEXT
+);
+CREATE TABLE LoanPurpose (
+    loan_purpose INTEGER PRIMARY KEY,
+    loan_purpose_name TEXT
+);
+CREATE TABLE OwnerOccupancy (
+    owner_occupancy INTEGER PRIMARY KEY,
+    owner_occupancy_name TEXT
+);
+CREATE TABLE Preapproval (
+    preapproval INTEGER PRIMARY KEY,
+    preapproval_name TEXT
+);
+CREATE TABLE ActionTaken (
+    action_taken INTEGER PRIMARY KEY,
+    action_taken_name TEXT
+);
+CREATE TABLE Applicant_Ethnicity (
+    applicant_ethnicity INTEGER PRIMARY KEY,
+    applicant_ethnicity_name TEXT
+);
+CREATE TABLE Applicant_Sex (
+    applicant_sex INTEGER PRIMARY KEY,
+    applicant_sex_name TEXT
+);
+CREATE TABLE Co_Applicant_Ethnicity (
+    co_applicant_ethnicity INTEGER PRIMARY KEY,
+    co_applicant_ethnicity_name TEXT
+);
+CREATE TABLE Co_Applicant_Sex (
+    co_applicant_sex INTEGER PRIMARY KEY,
+    co_applicant_sex_name TEXT
+);
+
+CREATE TABLE County (
+    county_code INTEGER PRIMARY KEY,
+    county_name TEXT
+);
+CREATE TABLE MSAMD (
+    msamd INTEGER PRIMARY KEY,
+    msamd_name TEXT
+);
+CREATE TABLE State_Information (
+    state_code INTEGER PRIMARY KEY,
+    state_name TEXT,
+    state_abbr TEXT
+);
+CREATE TABLE EditStatus (
+    edit_status INTEGER,
+    edit_status_name TEXT
+);
+CREATE TABLE HoepaStatus (
+    hoepa_status INTEGER PRIMARY KEY,
+    hoepa_status_name TEXT
+);
+CREATE TABLE LienStatus (
+    lien_status INTEGER PRIMARY KEY,
+    lien_status_name TEXT
+);
+CREATE TABLE PurchaserType (
+    purchaser_type INTEGER PRIMARY KEY,
+    purchaser_type_name TEXT
+);
+CREATE TABLE Location_Information (
+    location_id SERIAL PRIMARY KEY,
+    census_tract_number NUMERIC,
+    county_code INTEGER REFERENCES County(county_code),
+    msamd INTEGER REFERENCES MSAMD(msamd),
+    state_code INTEGER REFERENCES State_Information(state_code),
+    population NUMERIC,
+    minority_population NUMERIC,
+    tract_to_msamd_income NUMERIC,
+    hud_median_family_income NUMERIC,
+    number_of_1_to_4_family_units INTEGER,
+    number_of_owner_occupied_units INTEGER,
+    UNIQUE(census_tract_number, county_code, msamd, state_code)
+);
+CREATE TABLE Race (
+    race_code INTEGER PRIMARY KEY,
+    race_name TEXT
+);
+CREATE TABLE Reason (
+    reason_code INTEGER PRIMARY KEY,
+    reason_name TEXT
+);
+CREATE TABLE Application_Information (
+    application_id INTEGER PRIMARY KEY,
+    as_of_year INTEGER,
+    respondent_id TEXT,
+    agency_code INTEGER REFERENCES Agency_Information(agency_code),
+    loan_type INTEGER REFERENCES LoanType(loan_type),
+    property_type INTEGER REFERENCES PropertyType(property_type),
+    purchaser_type INTEGER REFERENCES PurchaserType(purchaser_type),
+    loan_purpose INTEGER REFERENCES LoanPurpose(loan_purpose),
+    owner_occupancy INTEGER REFERENCES OwnerOccupancy(owner_occupancy),
+    preapproval INTEGER REFERENCES Preapproval(preapproval),
+    action_taken INTEGER REFERENCES ActionTaken(action_taken),
+    loan_amount_000s NUMERIC,
+    applicant_income_000s NUMERIC,
+    applicant_ethnicity INTEGER REFERENCES Applicant_Ethnicity(applicant_ethnicity),
+    applicant_sex INTEGER REFERENCES Applicant_Sex(applicant_sex),
+    co_applicant_ethnicity INTEGER REFERENCES Co_Applicant_Ethnicity(co_applicant_ethnicity),
+    co_applicant_sex INTEGER REFERENCES Co_Applicant_Sex(co_applicant_sex),
+    hoepa_status INTEGER REFERENCES HoepaStatus(hoepa_status),
+    lien_status INTEGER REFERENCES LienStatus(lien_status),
+    rate_spread NUMERIC,
+    location_id INTEGER REFERENCES Location_Information(location_id)
+
+);
+    CREATE TABLE Applicant_Race (
+    application_id INTEGER REFERENCES Application_Information(application_id),
+    applicant_race_number INTEGER,
+    race_code INTEGER REFERENCES Race(race_code),
+    PRIMARY KEY (application_id, applicant_race_number)
+);
+
+CREATE TABLE Co_Applicant_Race (
+    application_id INTEGER REFERENCES Application_Information(application_id),
+    co_applicant_race_number INTEGER,
+    race_code INTEGER REFERENCES Race(race_code),
+    PRIMARY KEY(application_id, co_applicant_race_number)
+);
+
+CREATE TABLE DenialReason (
+    application_id INTEGER REFERENCES Application_Information(application_id),
+    denial_reason_number INTEGER,
+    reason_code INTEGER REFERENCES Reason(reason_code),
+    PRIMARY KEY(application_id, denial_reason_number)
+);
+
+CREATE TABLE EmptyData (
+    sequence_number TEXT,
+    edit_status INTEGER,
+    application_date_indicator TEXT
+    );
+

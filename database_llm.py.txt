@@ -1,0 +1,85 @@
+# This is the backend script which uses an llm to generate SQL queries. 
+# Sources used: The recitation slides on project 2.
+# Sources used: Transcripts (included in the submission) 
+
+import paramiko
+import getpass
+import shlex
+from llama_cpp import Llama 
+
+host = "ilab.cs.rutgers.edu"
+remote = "~/cheeseServer/cs336/ilab_script.py"
+
+def main():
+    username = getpass.getpass("Enter ilab username: ")
+    password = getpass.getpass("Enter password: ")
+
+    question = input("Enter your question: ")
+
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    try:
+        ssh.connect(hostname = host, username= username, password=password)
+    except paramiko.AuthenticationException:
+        print("Authentication failed.")
+        return
+
+    llm = Llama(model_path="model/Phi-3.5-mini-instruct-Q4_K_M.gguf", n_ctx=2900,n_threads=4,n_gpu_layers=0)
+
+    with open("sql_scripts.sql","r", encoding="utf-8") as file:
+        sql_file = file.read()
+
+    while question!="exit":
+        prompt =  f"""You are a highly accurate SQL query generator. Your ONLY task is to translate a natural language question into a single, complete, and valid SQL query based on the provided database schema.
+
+You MUST adhere to the following rules:
+1.  Output ONLY the SQL query. No other text, explanations, or conversational filler is allowed.
+2.  Use *only* the table and column names *exactly* as they appear in the database schema. Do NOT abbreviate, alter, or invent names.
+3.  The generated query must be a single, complete SQL statement, correctly terminated (e.g., with a semicolon if applicable to your SQL dialect).
+4.  The query must be valid and executable against the provided schema to answer the natural language question.
+
+Here is the database schema:
+---
+{sql_file}
+---
+
+Here is the natural language question:
+---
+{question}
+---
+
+Generate the SQL query below:
+
+-- Write the complete and valid SQL query here:
+"""
+
+
+        res = llm(prompt, max_tokens=200)
+
+        print("\n-------------SQL QUERY---------------------")
+        print(res["choices"][0]["text"])
+        query = res["choices"][0]["text"]
+        query = query.replace("```sql","")
+        query = query.replace("```","")
+        query.strip()
+        query = query.split(";")[0] # This removes the explanation from the response.
+        remote_input = shlex.quote(query)
+        command = f'python3 {remote} {remote_input}'
+        stdin,stdout,stderr = ssh.exec_command(command)
+        result = stdout.read().decode()
+        error = stderr.read().decode()
+    
+        print("\n---------------RESPONSE FROM ILAB--------------------------")
+        if result:
+            print(result)
+        if error:
+            print("Remote standard error: \n", error)
+        question = input("Enter your question: ")
+
+
+    ssh.close()
+
+
+if __name__=="__main__":
+    main()

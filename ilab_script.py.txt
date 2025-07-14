@@ -1,0 +1,10 @@
+﻿* This is the remote script which executes the SQL queries.
+Sources used: The recitation slides on project 2.
+Sources used: Transcripts (included in the submission).
+
+* import sys import textwrap import psycopg2 if(len(sys.argv)<2 or 
+* sys.argv[1]==""): print("Please provide a SQL query") sys.exit(1) sql_query = 
+* sys.argv[1] connection = 
+* psycopg2.connect(dbname="group33",user="ym569",host="postgres.cs.rutgers.e
+* du") conn_cursor = connection.cursor() conn_cursor.execute(sql_query)
+values = conn_cursor.fetchall() for i in values: print(i) print("\n") conn_cursor.close() connection.close()

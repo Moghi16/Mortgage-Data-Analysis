@@ -1,0 +1,482 @@
+﻿-- Source: Postgresql Official Documentation: https://www.postgresql.org/docs/
+-- We used the slides and the postgres official documentation for commands such as DISTINCT, CAST, and NULLIF.
+SET statement_timeout= 0;
+INSERT INTO Agency_Information(agency_code, agency_name, agency_abbr) 
+SELECT DISTINCT
+    CAST(NULLIF(agency_code, '') AS INTEGER), 
+    NULLIF(agency_name,''), 
+    NULLIF(agency_abbr,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(agency_code, '') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO LoanType(loan_type, loan_type_name) 
+SELECT DISTINCT
+    CAST(NULLIF(loan_type,'') AS INTEGER), 
+    NULLIF(loan_type_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(loan_type,'') AS INTEGER) IS NOT NULL; 
+
+
+
+
+INSERT INTO PropertyType(property_type, property_type_name) 
+SELECT DISTINCT
+    CAST(NULLIF(property_type,'') AS INTEGER), 
+    NULLIF(property_type_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(property_type,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO LoanPurpose(loan_purpose, loan_purpose_name) 
+SELECT DISTINCT
+    CAST(NULLIF(loan_purpose,'') AS INTEGER), 
+    NULLIF(loan_purpose_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(loan_purpose,'') AS INTEGER) IS NOT NULL ;
+
+
+INSERT INTO OwnerOccupancy(owner_occupancy, owner_occupancy_name) 
+SELECT DISTINCT
+    CAST(NULLIF(owner_occupancy,'') AS INTEGER), 
+    NULLIF(owner_occupancy_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(owner_occupancy,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Preapproval(preapproval, preapproval_name) 
+SELECT DISTINCT
+    CAST(NULLIF(preapproval,'') AS INTEGER), 
+    NULLIF(preapproval_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(preapproval,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO ActionTaken(action_taken, action_taken_name) 
+SELECT DISTINCT
+    CAST(NULLIF(action_taken,'') AS INTEGER), 
+    NULLIF(action_taken_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(action_taken,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Applicant_Ethnicity(applicant_ethnicity, applicant_ethnicity_name) 
+SELECT DISTINCT
+    CAST(NULLIF(applicant_ethnicity,'') AS INTEGER), 
+    NULLIF(applicant_ethnicity_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(applicant_ethnicity,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Applicant_Sex(applicant_sex, applicant_sex_name) 
+SELECT DISTINCT
+    CAST(NULLIF(applicant_sex,'') AS INTEGER), 
+    NULLIF(applicant_sex_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(applicant_sex,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Co_Applicant_Ethnicity(co_applicant_ethnicity, co_applicant_ethnicity_name) 
+SELECT DISTINCT
+    CAST(NULLIF(co_applicant_ethnicity,'') AS INTEGER), 
+    NULLIF(co_applicant_ethnicity_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(co_applicant_ethnicity,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Co_Applicant_Sex(co_applicant_sex, co_applicant_sex_name) 
+SELECT DISTINCT
+    CAST(NULLIF(co_applicant_sex,'') AS INTEGER), 
+    NULLIF(co_applicant_sex_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(co_applicant_sex,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO County(county_code, county_name) 
+SELECT DISTINCT
+    CAST(NULLIF(county_code,'') AS INTEGER), 
+    NULLIF(county_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(county_code,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO MSAMD(msamd, msamd_name) 
+SELECT DISTINCT 
+    CAST(NULLIF(msamd,'') AS INTEGER), 
+    NULLIF(msamd_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(msamd,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO State_Information(state_code, state_name, state_abbr) 
+SELECT DISTINCT
+    CAST(NULLIF(state_code,'') AS INTEGER), 
+    NULLIF(state_name,''), 
+    NULLIF(state_abbr,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(state_code,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO EditStatus(edit_status, edit_status_name) 
+SELECT DISTINCT 
+    CAST(NULLIF(edit_status,'') AS INTEGER), 
+    NULLIF(edit_status_name,'')
+FROM Preliminary;
+
+
+
+
+INSERT INTO LienStatus(lien_status, lien_status_name) 
+SELECT DISTINCT
+    CAST(NULLIF(lien_status,'') AS INTEGER), 
+    NULLIF(lien_status_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(lien_status,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO HoepaStatus(hoepa_status, hoepa_status_name) 
+SELECT DISTINCT
+    CAST(NULLIF(hoepa_status,'') AS INTEGER), 
+    NULLIF(hoepa_status_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(hoepa_status,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO PurchaserType(purchaser_type, purchaser_type_name) 
+SELECT DISTINCT
+    CAST(NULLIF(purchaser_type,'') AS INTEGER), 
+    NULLIF(purchaser_type_name,'') 
+FROM Preliminary
+WHERE CAST(NULLIF(purchaser_type,'') AS INTEGER) IS NOT NULL;
+
+
+
+
+--ALTER TABLE Location ALTER COLUMN location_id TYPE SERIAL;
+INSERT INTO Location_Information(census_tract_number,county_code,msamd,state_code,population,minority_population,tract_to_msamd_income,hud_median_family_income,number_of_1_to_4_family_units,number_of_owner_occupied_units) 
+SELECT DISTINCT
+    CAST(NULLIF(census_tract_number,'') AS NUMERIC),
+    CAST(NULLIF(county_code,'') AS INTEGER),
+    CAST(NULLIF(msamd,'') AS INTEGER),
+    CAST(NULLIF(state_code,'') AS INTEGER),
+    CAST(NULLIF(population,'') AS NUMERIC),
+    CAST(NULLIF(minority_population,'') AS NUMERIC),
+    CAST(NULLIF(tract_to_msamd_income,'') AS NUMERIC),
+    CAST(NULLIF(hud_median_family_income,'') AS NUMERIC),
+    CAST(NULLIF(number_of_1_to_4_family_units,'') AS INTEGER),
+    CAST(NULLIF(number_of_owner_occupied_units,'') AS INTEGER)
+FROM Preliminary;
+
+
+
+
+INSERT INTO Race(race_code, race_name)
+SELECT DISTINCT
+    CAST(NULLIF(applicant_race_1,'') AS INTEGER),
+    NULLIF(applicant_race_name_1,'')
+FROM Preliminary
+WHERE CAST(NULLIF(applicant_race_1,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Race(race_code, race_name)
+SELECT DISTINCT
+    CAST(NULLIF(applicant_race_2,'')AS INTEGER),
+    NULLIF(applicant_race_name_2,'')
+FROM Preliminary p
+WHERE CAST(NULLIF(p.applicant_race_2,'') AS INTEGER) IS NOT NULL AND NOT EXISTS(SELECT 1 FROM Race r WHERE CAST(p.applicant_race_2 AS INTEGER) = CAST(r.race_code AS INTEGER)) 
+;
+
+
+INSERT INTO Race(race_code, race_name)
+SELECT DISTINCT
+    CAST(NULLIF(applicant_race_3,'') AS INTEGER),
+    NULLIF(applicant_race_name_3,'')
+FROM Preliminary p
+WHERE CAST(NULLIF(p.applicant_race_3,'') AS INTEGER) IS NOT NULL AND NOT EXISTS(SELECT 1 FROM Race r WHERE CAST(p.applicant_race_3 AS INTEGER) = CAST(r.race_code AS INTEGER)) 
+;
+
+
+INSERT INTO Race(race_code, race_name)
+SELECT DISTINCT
+    CAST(NULLIF(applicant_race_4,'') AS INTEGER),
+    NULLIF(applicant_race_name_4,'')
+FROM Preliminary p
+WHERE CAST(NULLIF(p.applicant_race_4,'') AS INTEGER) IS NOT NULL AND NOT EXISTS(SELECT 1 FROM Race r WHERE CAST(p.applicant_race_4 AS INTEGER) = CAST(r.race_code AS INTEGER)) 
+;
+
+
+INSERT INTO Race(race_code, race_name)
+SELECT DISTINCT
+    CAST(NULLIF(applicant_race_5,'') AS INTEGER),
+    NULLIF(applicant_race_name_5,'')
+FROM Preliminary p
+WHERE CAST(NULLIF(p.applicant_race_5,'')AS INTEGER) IS NOT NULL AND NOT EXISTS(SELECT 1 FROM Race r WHERE CAST(p.applicant_race_5 AS INTEGER) = CAST(r.race_code AS INTEGER)) 
+;
+
+
+INSERT INTO Race(race_code, race_name)
+SELECT DISTINCT
+    CAST(NULLIF(co_applicant_race_1,'') AS INTEGER),
+    NULLIF(co_applicant_race_name_1,'')
+FROM Preliminary p
+WHERE CAST(NULLIF(p.co_applicant_race_1,'') AS INTEGER) IS NOT NULL AND NOT EXISTS(SELECT 1 FROM Race r WHERE CAST(p.co_applicant_race_1 AS INTEGER) = CAST(r.race_code AS INTEGER)) 
+;
+
+
+INSERT INTO Race(race_code, race_name)
+SELECT DISTINCT
+    CAST(NULLIF(co_applicant_race_2,'') AS INTEGER),
+    NULLIF(co_applicant_race_name_2,'')
+FROM Preliminary p
+WHERE CAST(NULLIF(p.co_applicant_race_2,'') AS INTEGER) IS NOT NULL AND NOT EXISTS(SELECT 1 FROM Race r WHERE CAST(p.co_applicant_race_2 AS INTEGER) = CAST(r.race_code AS INTEGER))
+;
+INSERT INTO Race(race_code, race_name)
+SELECT DISTINCT
+    CAST(NULLIF(co_applicant_race_3,'') AS INTEGER),
+    NULLIF(co_applicant_race_name_3,'')
+FROM Preliminary p
+WHERE CAST(NULLIF(p.co_applicant_race_3,'') AS INTEGER) IS NOT NULL AND NOT EXISTS(SELECT 1 FROM Race r WHERE CAST(p.co_applicant_race_3 AS INTEGER) = CAST(r.race_code AS INTEGER))
+;
+INSERT INTO Race(race_code, race_name)
+SELECT DISTINCT
+    CAST(NULLIF(co_applicant_race_4,'') AS INTEGER),
+    NULLIF(co_applicant_race_name_4,'')
+FROM Preliminary p
+WHERE CAST(NULLIF(co_applicant_race_4,'') AS INTEGER) IS NOT NULL AND NOT EXISTS(SELECT 1 FROM Race r WHERE CAST(p.co_applicant_race_4 AS INTEGER) = CAST(r.race_code AS INTEGER)) 
+;
+INSERT INTO Race(race_code, race_name)
+SELECT DISTINCT
+    CAST(NULLIF(co_applicant_race_5,'') AS INTEGER),
+    NULLIF(co_applicant_race_name_5,'')
+FROM Preliminary p
+WHERE CAST(NULLIF(co_applicant_race_5,'') AS INTEGER) IS NOT NULL AND NOT EXISTS(SELECT 1 FROM Race r WHERE CAST(p.co_applicant_race_5 AS INTEGER) = CAST(r.race_code AS INTEGER)) 
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+INSERT INTO Reason(reason_code, reason_name)
+SELECT DISTINCT
+    CAST(NULLIF(denial_reason_1,'') AS INTEGER),
+    NULLIF(denial_reason_name_1,'')
+FROM Preliminary
+WHERE CAST(NULLIF(denial_reason_1,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Reason(reason_code, reason_name)
+SELECT DISTINCT
+    CAST(NULLIF(p.denial_reason_2,'') AS INTEGER),
+    NULLIF(p.denial_reason_name_2,'')
+FROM Preliminary p
+WHERE CAST(NULLIF(denial_reason_2,'') AS INTEGER) IS NOT NULL AND NOT EXISTS(SELECT 1 FROM Reason c WHERE CAST(p.denial_reason_2 AS INTEGER) = CAST(c.reason_code AS INTEGER)) 
+;
+INSERT INTO Reason(reason_code, reason_name)
+SELECT DISTINCT
+    CAST(NULLIF(p.denial_reason_3,'') AS INTEGER),
+    NULLIF(p.denial_reason_name_3,'')
+FROM Preliminary p
+WHERE CAST(NULLIF(denial_reason_3,'') AS INTEGER) IS NOT NULL AND NOT EXISTS(SELECT 1 FROM Reason c WHERE CAST(p.denial_reason_3 AS INTEGER) = CAST(c.reason_code AS INTEGER)) 
+;
+
+
+
+
+
+
+--Preliminary joins with Location. We need to make sure if the corresponding location attributes in both the tables are either the same or both are null. 
+INSERT INTO Application_Information(application_id, as_of_year, respondent_id,agency_code,loan_type, property_type, purchaser_type, loan_purpose, owner_occupancy, preapproval, action_taken, loan_amount_000s, applicant_income_000s, applicant_ethnicity, applicant_sex, co_applicant_ethnicity, co_applicant_sex, hoepa_status, lien_status, rate_spread, location_id) 
+SELECT DISTINCT
+    p.application_id, 
+    CAST(NULLIF(p.as_of_year,'') AS INTEGER), 
+    CAST(NULLIF(p.respondent_id,'') AS TEXT),
+    CAST(NULLIF(p.agency_code,'') AS INTEGER), 
+    CAST(NULLIF(p.loan_type,'') AS INTEGER),  
+    CAST(NULLIF(p.property_type,'') AS INTEGER),
+    CAST(NULLIF(p.purchaser_type,'') AS INTEGER), 
+    CAST(NULLIF(p.loan_purpose,'') AS INTEGER), 
+    CAST(NULLIF(p.owner_occupancy,'') AS INTEGER), 
+    CAST(NULLIF(p.preapproval,'') AS INTEGER), 
+    CAST(NULLIF(p.action_taken,'') AS INTEGER), 
+    CAST(NULLIF(p.loan_amount_000s,'') AS INTEGER),
+    CAST(NULLIF(p.applicant_income_000s,'') AS NUMERIC), 
+    CAST(NULLIF(p.applicant_ethnicity,'') AS INTEGER),
+    CAST(NULLIF(p.applicant_sex,'') AS INTEGER),
+    CAST(NULLIF(p.co_applicant_ethnicity,'') AS INTEGER),
+    CAST(NULLIF(p.co_applicant_sex,'') AS INTEGER),
+    CAST(NULLIF(p.hoepa_status,'') AS INTEGER), 
+    CAST(NULLIF(p.lien_status,'') AS INTEGER),
+    CAST(NULLIF(p.rate_spread,'') AS NUMERIC), 
+    l.location_id
+FROM Preliminary p
+LEFT JOIN Location_Information l ON ((l.census_tract_number IS NULL AND NULLIF(p.census_tract_number,'') IS NULL) OR (l.census_tract_number = CAST(NULLIF(p.census_tract_number,'') AS NUMERIC))) 
+AND ((l.county_code IS NULL AND NULLIF(p.county_code,'') IS NULL) OR (l.county_code = CAST(NULLIF(p.county_code,'') AS INTEGER)))
+AND ((l.msamd IS NULL AND NULLIF(p.msamd,'') IS NULL) OR (l.msamd = CAST(NULLIF(p.msamd,'') AS INTEGER)))
+AND ((l.state_code IS NULL AND NULLIF(p.state_code,'') IS NULL) OR (l.state_code = CAST(NULLIF(p.state_code,'') AS INTEGER)));
+
+
+
+
+INSERT INTO Applicant_Race(application_id, applicant_race_number, race_code)
+SELECT DISTINCT
+ application_id,
+ 1,
+ CAST(NULLIF(applicant_race_1,'') AS INTEGER)
+FROM Preliminary; 
+
+
+INSERT INTO Applicant_Race(application_id, applicant_race_number, race_code)
+SELECT DISTINCT
+ application_id,
+ 2,
+ CAST(NULLIF(applicant_race_2,'') AS INTEGER)
+FROM Preliminary 
+WHERE CAST(NULLIF(applicant_race_2,'') AS INTEGER) IS NOT NULL;
+
+
+
+
+INSERT INTO Applicant_Race(application_id, applicant_race_number, race_code)
+SELECT DISTINCT
+ application_id,
+ 3,
+ CAST(NULLIF(applicant_race_3,'') AS INTEGER)
+FROM Preliminary p 
+WHERE CAST(NULLIF(applicant_race_3,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Applicant_Race(application_id, applicant_race_number, race_code)
+SELECT DISTINCT
+ application_id,
+ 4,
+ CAST(NULLIF(applicant_race_4,'') AS INTEGER)
+FROM Preliminary 
+WHERE CAST(NULLIF(applicant_race_4,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Applicant_Race(application_id, applicant_race_number, race_code)
+SELECT DISTINCT
+ application_id,
+ 5,
+ CAST(NULLIF(applicant_race_5,'') AS INTEGER)
+FROM Preliminary 
+WHERE CAST(NULLIF(applicant_race_5,'') AS INTEGER) IS NOT NULL;
+
+
+
+
+
+
+INSERT INTO Co_Applicant_Race(application_id, co_applicant_race_number, race_code)  
+SELECT DISTINCT
+ application_id,
+ 1,
+ CAST(NULLIF(co_applicant_race_1,'') AS INTEGER)
+FROM Preliminary  
+WHERE CAST(NULLIF(co_applicant_race_1,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Co_Applicant_Race(application_id, co_applicant_race_number, race_code)
+SELECT DISTINCT
+ application_id,
+ 2,
+ CAST(NULLIF(co_applicant_race_2,'') AS INTEGER)
+FROM Preliminary  
+WHERE CAST(NULLIF(co_applicant_race_2,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Co_Applicant_Race(application_id, co_applicant_race_number, race_code)
+SELECT DISTINCT
+ application_id,
+ 3,
+ CAST(NULLIF(co_applicant_race_3,'') AS INTEGER)
+FROM Preliminary 
+WHERE CAST(NULLIF(co_applicant_race_3,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Co_Applicant_Race(application_id, co_applicant_race_number, race_code)
+SELECT DISTINCT
+ application_id,
+ 4,
+ CAST(NULLIF(co_applicant_race_4,'') AS INTEGER)
+FROM Preliminary 
+WHERE CAST(NULLIF(co_applicant_race_4,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO Co_Applicant_Race(application_id, co_applicant_race_number, race_code)
+SELECT DISTINCT
+ application_id,
+ 5,
+ CAST(NULLIF(co_applicant_race_5,'') AS INTEGER)
+FROM Preliminary
+WHERE CAST(NULLIF(co_applicant_race_5,'') AS INTEGER) IS NOT NULL;
+
+
+
+
+ 
+ 
+
+
+
+
+INSERT INTO DenialReason (application_id, denial_reason_number, reason_code) 
+SELECT DISTINCT
+    application_id,
+    1,
+    CAST(NULLIF(denial_reason_1,'') AS INTEGER)
+FROM Preliminary
+WHERE CAST(NULLIF(denial_reason_1,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO DenialReason (application_id, denial_reason_number, reason_code)
+SELECT DISTINCT
+    application_id,
+    2,
+    CAST(NULLIF(denial_reason_2,'') AS INTEGER)
+FROM Preliminary
+WHERE CAST(NULLIF(denial_reason_2,'') AS INTEGER) IS NOT NULL;
+
+
+INSERT INTO DenialReason (application_id, denial_reason_number, reason_code)
+SELECT DISTINCT
+    application_id,
+    3,
+    CAST(NULLIF(denial_reason_3,'') AS INTEGER)
+FROM Preliminary
+WHERE CAST(NULLIF(denial_reason_3,'') AS INTEGER) IS NOT NULL;
+
+
+
+
+
+
+
+
+
+
+INSERT INTO EmptyData(sequence_number, edit_status, application_date_indicator) 
+SELECT DISTINCT
+    CAST(NULLIF(sequence_number,'') AS TEXT),
+    CAST(NULLIF(edit_status,'') AS INTEGER),
+    CAST(NULLIF(application_date_indicator,'') AS TEXT)
+FROM Preliminary;
